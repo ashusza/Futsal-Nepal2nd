@@ -1,6 +1,7 @@
-# FUTSAL NEPAL — Landing Page PRD v2.0
+# FUTSAL NEPAL — Landing Page PRD v2.1
 ## Stack: Next.js 14 App Router + Framer Motion + Tailwind CSS
 ## Theme: Cinematic Aggressive-Red × Deep Space Black
+## Updated: IntroSplash flow — auto-transition, no scroll gate
 
 ---
 
@@ -141,9 +142,14 @@ futsal-nepal/
 ## Page Section Map (Scroll Order)
 
 ```
-01 → IntroSplash          (100vh — cinematic entry)
-02 → Navbar               (sticky — appears on scroll)
-03 → HeroSection          (100vh — video bg, 3D headline)
+── ON PAGE LOAD (no scroll required) ──────────────────────────
+01 → IntroSplash          (fullscreen overlay — auto plays, auto exits)
+     ↓ AUTO-TRANSITIONS after 2.8s
+     ↓ (skipped on repeat visits via sessionStorage)
+
+── USER NOW SEES HERO — SCROLLS DOWN TO EXPLORE ───────────────
+02 → HeroSection          (100vh — video bg, 3D headline) ← FIRST thing visible after splash
+03 → Navbar               (sticky — appears as soon as user scrolls down)
        ↓ 3D FLIP TRANSITION
 04 → ParallaxStory        (400vh — scroll-driven futsal story)
        ↓ CURTAIN WIPE
@@ -160,6 +166,12 @@ futsal-nepal/
 11 → Footer               (auto height)
 ```
 
+> **Flow Logic:**
+> IntroSplash is a fullscreen overlay rendered on top of HeroSection.
+> HeroSection is always mounted underneath — it does not wait for splash to finish.
+> When splash exits, HeroSection is already rendered and immediately visible.
+> This means zero loading gap between splash and hero.
+
 ---
 
 ## Section Specifications
@@ -167,48 +179,97 @@ futsal-nepal/
 ---
 
 ### 01 — `IntroSplash.tsx`
-**Purpose:** Cinematic gate. Makes every visitor stop and feel something.
+**Purpose:** Cinematic opening statement. Plays automatically on first visit, then gets out of the way so the user sees the Hero immediately.
+
+**Rendering Architecture:**
+```
+IntroSplash is a fixed fullscreen OVERLAY — position: fixed, inset: 0, z-index: 200
+HeroSection is mounted UNDERNEATH it at all times
+When splash exits, Hero is already rendered — zero loading gap
+Scroll is locked (overflow: hidden on body) while splash is playing
+Scroll lock is released the moment splash begins its exit animation
+```
+
+**sessionStorage Logic (skip on repeat visits):**
+```typescript
+// On component mount:
+const hasSeen = sessionStorage.getItem('splash-seen')
+if (hasSeen) {
+  // Skip splash entirely — set isDone: true immediately
+  // Hero is visible from the first frame
+  return null
+}
+// On splash complete:
+sessionStorage.setItem('splash-seen', 'true')
+
+// Result:
+// First visit in a browser session → splash plays
+// Page refresh or back navigation → splash skipped, Hero shows instantly
+// New browser session (new tab, closed and reopened) → splash plays again
+```
 
 **Visual:**
 ```
-- Full 100vh, background #0A0A0C
-- Red grain texture pulsing faintly
-- Deep radial red glow at center: radial-gradient(circle at 50% 50%, rgba(230,25,43,0.12), transparent 60%)
+- Fixed fullscreen overlay, background: #0A0A0C
+- Deep radial red glow at center:
+  radial-gradient(circle at 50% 50%, rgba(230,25,43,0.12), transparent 60%)
+- Grain overlay visible at full intensity during splash
 ```
 
-**Animation Sequence:**
+**Animation Sequence (total duration: ~2.8s):**
 ```
-0ms    → Black screen
-200ms  → Single red horizontal line expands from center
+0ms    → Black overlay, scroll locked
+200ms  → Single red horizontal line expands from center outward
          scaleX: 0 → 1, width: 40%, height: 1px, color: #E6192B
          duration: 600ms, ease: --ease-snap
+
 800ms  → "FUTSAL" reveals letter by letter
-         Each letter: y: -50px → 0, opacity: 0 → 1
+         Each letter: y: -50px → 0, opacity: 0 → 1, rotateX: -20deg → 0deg
          Stagger: 0.06s per letter
-         Font: Bebas Neue 96px desktop / 56px mobile
-         3D: each letter has rotateX(-20deg) → rotateX(0deg) simultaneously
-1400ms → "NEPAL" reveals same way, 100ms after FUTSAL completes
-         Color: #E6192B, slight red glow behind text
-1900ms → Tagline fades in: "NEPAL'S ELITE FUTSAL PLATFORM"
-         JetBrains Mono, 12px, muted, letter-spacing: 0.3em
-2400ms → "SCROLL TO ENTER" pulses at bottom
-         Pulsing opacity: 1 → 0.3 → 1, 1.5s interval
-         Small animated down chevron below
+         Font: Bebas Neue 96px desktop / 56px mobile, white
+
+1400ms → "NEPAL" reveals same way, 100ms after "FUTSAL" completes
+         Color: #E6192B
+         Subtle red glow blooms behind "NEPAL" text
+
+1900ms → Tagline fades in below:
+         "NEPAL'S ELITE FUTSAL PLATFORM"
+         JetBrains Mono 12px, #52525B, letter-spacing: 0.3em
+         opacity: 0 → 1, duration: 400ms
+
+2400ms → AUTO-EXIT BEGINS (no user input required)
+         Scroll lock releases here
+         Splash overlay: opacity 1 → 0, scale: 1 → 1.04
+         Duration: 400ms, ease: --ease-snap
+         HeroSection becomes fully visible and interactive
+
+2800ms → Splash unmounted from DOM (display: none)
+         Page is fully in Hero state
+         User can now scroll freely
 ```
 
-**Exit:**
+**❌ REMOVED: "SCROLL TO ENTER" prompt**
 ```
-- Trigger: scrollY > 60px
-- Splash: opacity 1 → 0, y: 0 → -30px, duration: 500ms
-- After exit: display none, scroll lock released
+There is no scroll-to-enter gate.
+No chevron. No instruction text.
+The splash exits automatically — the user does nothing.
+This respects the user's time, especially investors.
 ```
 
 **3D Details:**
 ```
-- "FUTSAL NEPAL" has subtle perspective depth
-- perspective: 800px on container
-- Each word: rotateX from -15deg → 0deg on entry
-- Gives letters a "rising toward viewer" feel
+- perspective: 800px on splash container
+- Each letter: rotateX from -20deg → 0deg on entry (letters rise toward viewer)
+- "NEPAL" word: slight z-translation on entry (z: -20px → 0px)
+- Exit: scale(1.04) creates subtle push-away depth as it fades
+```
+
+**State shape:**
+```typescript
+type SplashState = 'playing' | 'exiting' | 'done'
+// playing → animation sequence runs
+// exiting → fade out begins, scroll unlocked
+// done    → component returns null, Hero is sole content
 ```
 
 ---
@@ -1013,6 +1074,19 @@ Step 8: npm run dev → localhost:3000
 
 ---
 
+## Changes in v2.1 (This Update)
+
+| What Changed | What It Was | What It Is Now |
+|---|---|---|
+| IntroSplash exit trigger | User had to scroll to dismiss | Auto-exits after 2.8s — no user input |
+| "Scroll to Enter" prompt | Present, pulsing at bottom | Removed completely |
+| Splash rendering | Full 100vh section pushing Hero down | Fixed overlay on top of Hero |
+| Repeat visit behavior | Splash played every time | sessionStorage skip — plays once per session |
+| Scroll lock | Not specified | Body scroll locked during splash, released on exit |
+| Hero visibility | Hero only visible after splash dismissed | Hero mounted underneath, visible instantly on exit |
+
+---
+
 ## My Improvements Added to v2.0
 
 | Addition | Why |
@@ -1027,4 +1101,3 @@ Step 8: npm run dev → localhost:3000
 | CountUp animations | Numbers counting up feel more alive for investor stats and social proof |
 | Error state on modal | Better UX, professional feel |
 | "BUILT IN NEPAL 🇳🇵" footer note | Local pride, resonates with both audiences |
-```
