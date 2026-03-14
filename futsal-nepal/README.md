@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚽ FUTSAL NEPAL — The Elite Pitch Experience
 
-## Getting Started
+[![Vercel Deployment](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![Next.js 15](https://img.shields.io/badge/Next.js-15-E6192B?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
+[![Framer Motion](https://img.shields.io/badge/Motion-Framer-FF3344?style=for-the-badge&logo=framer&logoColor=white)](https://framer.com/motion)
 
-First, run the development server:
+**RANKED #1 IN CINEMATIC SPORTS TECH — NEPAL'S FIRST ELITE FUTSAL ECOSYSTEM.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Futsal Nepal is a high-fidelity, high-performance landing page designed to capture early access for players and signal institutional credibility to investors. It features an aggressive "Cinematic Red" aesthetic combined with advanced scroll-driven animations and 3D interactions.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ The Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Built for speed, impact, and smooth delivery:
 
-## Learn More
+- **Framework**: [Next.js 15+](https://nextjs.org) (App Router)
+- **Styling**: [Tailwind CSS v4+](https://tailwindcss.com)
+- **Animations**: [Framer Motion](https://framer.com/motion) (Scroll-linked, 3D Tilt, Staggered Reveals)
+- **Typography**: Bebas Neue (Headings), Outfit (Body), JetBrains Mono (Technical UI)
+- **Icons**: Lucide React
+- **Hosting**: Vercel (Edge optimized)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✨ Design Signatures
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Aggressive-Red Aesthetic**: Tailored color palette (#E6192B) on Deep Space Black.
+- **Cinematic Entry**: Custom `IntroSplash` with 3D word assembly.
+- **Micro-Animations**: Mouse-responsive 3D tilt effects and holographic radial glows.
+- **Zero-Radius Design**: Sleek, sharp edges with custom diagonal clip-paths.
+- **Parallax Narrative**: A 400vh scroll-driven story telling the future of futsal in Nepal.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🏗️ Getting Started (Local)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone the repo**
+2. **Install dependencies**:
+   ```bash
+   cd futsal-nepal
+   npm install
+   ```
+3. **Run the dev server**:
+   ```bash
+   npm run dev
+   ```
+4. **View at** `http://localhost:3000`
+
+---
+
+## 🚢 Deployment Notes
+
+This project is optimized for Vercel. 
+
+> [!IMPORTANT]
+> Because the app lives in the `/futsal-nepal` subdirectory, ensure the **Root Directory** in Vercel Settings is set to `futsal-nepal`.
+
+---
+
+<p align="center">
+  <b>BOOK. PLAY. EARN. DOMINATE.</b><br>
+  <i>Built with ❤️ for the Futsal Community of Nepal.</i>
+</p>
