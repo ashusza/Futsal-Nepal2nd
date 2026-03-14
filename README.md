@@ -1,4 +1,4 @@
-# Futsal_Nepal2nd# ⚽ FUTSAL NEPAL — The Elite Pitch Experience
+# Futsal_Nepal# ⚽ FUTSAL NEPAL — The Elite Pitch Experience
 
 [![Vercel Deployment](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-E6192B?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
