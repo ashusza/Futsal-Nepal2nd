@@ -19,6 +19,30 @@ export default function ParallaxStory() {
   const ch1RotateX = useTransform(scrollYProgress, [0.15, 0.25], [0, -25]);
   const ch1Y = useTransform(scrollYProgress, [0, 0.1, 0.25], [60, 0, -60]);
 
+  const ch1Scale = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.25],
+    [0.82, 1.0, 1.0]
+  );
+
+  const ch1Z = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.25],
+    [-120, 0, 0]
+  );
+
+  const ch1SkewX = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.18, 0.25],
+    ['18deg', '18deg', '-3deg', '0deg']
+  );
+
+  const ch1LetterSpacing = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.18, 0.25],
+    ['0.4em', '0.4em', '-0.02em', '0.05em']
+  );
+
   // --- Chapter 2: THE STRUGGLE (0.25 - 0.5) ---
   const curtainScaleX = useTransform(scrollYProgress, [0.22, 0.28], [0, 1]);
   const curtainOpacity = useTransform(scrollYProgress, [0.28, 0.32, 0.45, 0.48], [1, 0, 0, 0]);
@@ -48,7 +72,10 @@ export default function ParallaxStory() {
     <section ref={containerRef} className="relative w-full h-[400vh] bg-background">
       
       {/* Sticky Viewport */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden [perspective:1000px] flex items-center justify-center">
+      <div 
+        className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center"
+        style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}
+      >
 
         {/* Global Parallax Background mapping to chapters */}
         <motion.div style={{ y: bgY }} className="absolute inset-0 z-0 select-none pointer-events-none">
@@ -77,13 +104,47 @@ export default function ParallaxStory() {
 
         {/* CHAPTER 1 */}
         <motion.div
-          style={{ opacity: ch1Opacity, rotateX: ch1RotateX, y: ch1Y }}
-          className="absolute inset-0 flex flex-col items-center justify-center text-center z-10"
+          style={{
+            opacity: ch1Opacity,
+            rotateX: ch1RotateX,
+            y: ch1Y,
+            scale: ch1Scale,
+            z: ch1Z,
+            skewX: ch1SkewX,
+            perspective: '1200px',
+            transformStyle: 'preserve-3d',
+          }}
+          className="absolute inset-0 flex flex-col items-center 
+          justify-center text-center z-10"
         >
-          <h2 className="font-heading text-5xl md:text-7xl text-white">EVERY GREAT TEAM</h2>
-          <h2 className="font-heading text-5xl md:text-7xl text-white">
-            STARTS ON A <span className="text-primary drop-shadow-glow-red">PITCH.</span>
-          </h2>
+          <motion.h2
+            style={{ letterSpacing: ch1LetterSpacing }}
+            className="font-heading text-5xl md:text-7xl text-white"
+          >
+            EVERY GREAT TEAM
+          </motion.h2>
+          <motion.h2
+            style={{ letterSpacing: ch1LetterSpacing }}
+            className="font-heading text-5xl md:text-7xl text-white"
+          >
+            STARTS ON A{' '}
+            <motion.span
+              className="text-primary"
+              style={{
+                textShadow: useTransform(
+                  scrollYProgress,
+                  [0, 0.15, 0.25],
+                  [
+                    '0 0 0px rgba(230,25,43,0)',
+                    '0 0 60px rgba(230,25,43,0.6)',
+                    '0 0 40px rgba(230,25,43,0.4)',
+                  ]
+                ),
+              }}
+            >
+              PITCH.
+            </motion.span>
+          </motion.h2>
         </motion.div>
 
         {/* TRANSITION WIPE 1 -> 2 */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WaitlistModal from "@/components/WaitlistModal";
@@ -16,6 +16,18 @@ import WaitlistSection from "@/components/WaitlistSection";
 
 export default function Home() {
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
+
+  // Sync splashDone with IntroSplash's internal logic (hides on scroll > 60)
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 60) {
+        setSplashDone(true);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <main className="relative bg-background text-white selection:bg-primary selection:text-white">
@@ -25,13 +37,19 @@ export default function Home() {
       {/* Navigation (Sticky after hero scroll) */}
       <Navbar />
 
-      {/* Main Flow */}
-      <div id="hero">
-        <HeroSection />
-      </div>
+      {/* 3D Shared Perspective Container */}
+      <div style={{ perspective: '1400px', perspectiveOrigin: '50% 50%' }}>
+        {/* Main Flow */}
+        <div id="hero">
+          <HeroSection 
+            splashDone={splashDone} 
+            onOpenWaitlist={() => setIsWaitlistOpen(true)}
+          />
+        </div>
 
-      <div id="story">
-        <ParallaxStory />
+        <div id="story">
+          <ParallaxStory />
+        </div>
       </div>
 
       <div id="features" className="relative z-20 bg-background">
