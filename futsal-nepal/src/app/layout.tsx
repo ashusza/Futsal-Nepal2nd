@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Outfit, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, Outfit, JetBrains_Mono, Metal_Mania } from "next/font/google";
 import "./globals.css";
 import GrainOverlay from "@/components/GrainOverlay";
+
+const metalMania = Metal_Mania({
+  weight: "400",
+  variable: "--font-metal-mania",
+  subsets: ["latin"],
+});
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -20,8 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Futsal Nepal | Early Access",
-  description: "Nepal's elite futsal booking, rewards & tournament platform.",
+  title: "Game Circle",
+  description: "Nepal's first elite futsal booking, rewards and tournament platform.",
 };
 
 export default function RootLayout({
@@ -30,10 +36,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${bebasNeue.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground`}
-      >
+    <html lang="en" className={`${bebasNeue.variable} ${outfit.variable} ${jetbrainsMono.variable} ${metalMania.variable}`}>
+      <body className="antialiased bg-background text-foreground">
         <GrainOverlay />
         {children}
       </body>

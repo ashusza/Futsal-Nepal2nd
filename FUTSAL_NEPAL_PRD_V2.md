@@ -1,7 +1,7 @@
-# FUTSAL NEPAL — Landing Page PRD v2.1
+# FUTSAL NEPAL — Landing Page PRD v2.2
 ## Stack: Next.js 14 App Router + Framer Motion + Tailwind CSS
 ## Theme: Cinematic Aggressive-Red × Deep Space Black
-## Updated: IntroSplash flow — auto-transition, no scroll gate
+## Updated: Hero background (pure code, no video) + Chapter 1 skew snap entry
 
 ---
 
@@ -330,89 +330,282 @@ type SplashState = 'playing' | 'exiting' | 'done'
 ---
 
 ### 03 — `HeroSection.tsx`
-**Purpose:** First content hit after splash. Must be jaw-dropping.
+**Purpose:** First content hit after splash exits. Must feel like a cinematic reveal — not a page load.
 
-**Background:**
+---
+
+**ENTRY ANIMATION (triggered when splash finishes — splashDone: true)**
 ```
-- Full 100vh
-- <video> tag: autoplay, muted, loop, playsInline
-- Source: /public/video/hero-reel.mp4
-  (Futsal highlight reel — fast cuts, goals, team moments)
-  (Fallback: dark futsal court image if video unavailable)
-- Dark overlay: linear-gradient(rgba(10,10,12,0.7), rgba(10,10,12,0.85))
-- KEN BURNS on fallback image: scale 1.0 → 1.08 over 10s, ease-in-out, alternate
+The hero does not just "appear". It has its own entry sequence that plays
+exactly once, immediately after the splash overlay fades out.
+
+Trigger: parent passes splashDone boolean prop → true when splash unmounts
+Implementation: Framer Motion AnimatePresence + initial/animate variants
+
+ENTRY SEQUENCE (all scroll-independent, time-based):
+
+0ms    → Hero starts invisible:
+         Video/bg: opacity 0, scale: 1.08 (already zoomed in)
+         Headline container: opacity 0, y: 0, rotateX: 12deg
+         perspective: 1200px on hero container
+         All supporting elements: opacity 0
+
+150ms  → Video/bg fades in + slowly pulls back to natural scale:
+         opacity: 0 → 1, scale: 1.08 → 1.0
+         duration: 1200ms, ease: cubic-bezier(0.25, 0.46, 0.45, 0.94)
+         Effect: feels like a camera pulling focus, world coming into view
+
+400ms  → Headline container rises and levels:
+         rotateX: 12deg → 0deg, opacity: 0 → 1, y: 40px → 0px
+         duration: 900ms, ease: --ease-snap (0.16, 1, 0.3, 1)
+         perspective: 1200px — letters feel like they tip forward toward viewer
+
+550ms  → "BOOK." line appears:
+         y: 60px → 0, opacity: 0 → 1
+         duration: 700ms, ease: --ease-snap
+
+700ms  → "PLAY." line appears (stagger +150ms):
+         y: 60px → 0, opacity: 0 → 1
+         duration: 700ms, ease: --ease-snap
+
+850ms  → "WIN." line appears (stagger +150ms):
+         y: 60px → 0, opacity: 0 → 1
+         Red glow blooms behind "WIN." simultaneously
+         radial glow: opacity 0 → 1, scale 0.6 → 1
+         duration: 700ms, ease: --ease-snap
+
+1100ms → Subtitle fades up:
+         y: 20px → 0, opacity: 0 → 0.55
+         duration: 600ms, ease: ease-out
+
+1300ms → Live counter pill slides in from left:
+         x: -30px → 0, opacity: 0 → 1
+         duration: 500ms, ease: --ease-snap
+
+1450ms → CTA button slides in from right:
+         x: 30px → 0, opacity: 0 → 1
+         duration: 500ms, ease: --ease-snap
+
+1600ms → Scroll indicator fades in at bottom:
+         opacity: 0 → 1, y: 10px → 0
+         duration: 400ms
+         Then begins its looping animated line
+
+TOTAL ENTRY DURATION: ~1.8s
+Feels like a scene assembling itself — not elements just appearing
 ```
 
-**Video Notes:**
+---
+
+**Background (pure code — no video, no images):**
 ```
-- If you don't have a video yet, use a placeholder dark futsal court image
-- Video should be compressed: max 8MB, 1920×1080, H.264
-- Add poster attribute with first frame image for fast paint
+Three stacked layers. Zero external assets. Loads instantly.
+
+LAYER 1 — Canvas particles (z-index: 1)
+  Full screen <canvas> absolutely positioned
+  60 floating particles total:
+    62% red (#E6192B) — ctx.shadowBlur: 10, shadowColor rgba(230,25,43,0.9)
+    38% white — rgba(255,255,255,0.35), no glow
+  Each particle: size 0.4–2.2px random, slow random velocity
+  Opacity pulses via Math.sin on per-particle phase offset
+  Particles wrap edges (toroidal — disappear one side, appear other)
+  60fps via requestAnimationFrame
+  Auto-resizes on window resize
+
+LAYER 2 — SVG futsal pitch lines (z-index: 2)
+  Full screen SVG viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+  60px grid pattern: rgba(255,255,255,0.025)
+  All court lines animate in via CSS strokeDashoffset:
+    animation: drawLine, from strokeDashoffset=length to 0
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+  Lines drawn in staggered order:
+    Pitch boundary:        delay 0.1s, duration 2.0s, stroke rgba(230,25,43,0.12), 1px
+    Center vertical line:  delay 0.3s, duration 1.8s, stroke rgba(230,25,43,0.09), 0.8px
+    Center circle:         delay 0.5s, duration 2.0s, stroke rgba(230,25,43,0.09), 0.8px
+    Left penalty area:     delay 0.7s, duration 1.8s, stroke rgba(230,25,43,0.08), 0.8px
+    Left goal:             delay 0.9s, duration 1.5s, stroke rgba(230,25,43,0.18), 1px
+    Right penalty area:    delay 0.7s, duration 1.8s, stroke rgba(230,25,43,0.08), 0.8px
+    Right goal:            delay 0.9s, duration 1.5s, stroke rgba(230,25,43,0.18), 1px
+
+  Static dots: center spot + both penalty spots
+    fill: rgba(230,25,43,0.2), radius 4px
+
+  Red ambient glow:
+    radialGradient cx="25%" cy="50%" r="35%"
+    rgba(230,25,43,0.07) → transparent
+    Behind text area — gives left side warmth
+
+LAYER 3 — Dark overlay (z-index: 3)
+  background: #0A0A0C solid
+  opacity: scroll-linked via useTransform
+  scrollYProgress [0, 1] → opacity [0.65, 0.95]
+  Darkens progressively as user scrolls — cinematic fade
+  During entry: starts at 1.0 → animates to 0.65 over 800ms
+  So background "reveals" as hero assembles
 ```
+
+---
 
 **Typography:**
 ```
-- Stacked, oversized, left-aligned
+- Stacked, oversized, left-aligned, max-width: 700px
 - "BOOK."  — Bebas Neue 96px, #FFFFFF, opacity: 100%
 - "PLAY."  — Bebas Neue 96px, #FFFFFF, opacity: 55%
 - "WIN."   — Bebas Neue 96px, #E6192B
-- Each line entry: y: 80px → 0, opacity: 0 → 1
-  Stagger: 0.15s between lines
-  Easing: --ease-snap
-- 3D MOUSE TILT: on mouse move over hero
-  Container perspective: 1000px
-  Headline rotateX: ±6deg, rotateY: ±8deg based on cursor position
-  Smooth interpolation: lerp factor 0.08
-  Gives headline a "holographic floating" feel
+  Red radial glow behind "WIN.":
+  radial-gradient(ellipse 60% 40% at 20% 50%, rgba(230,25,43,0.18), transparent)
+
+- 3D MOUSE TILT (active after entry completes):
+  Container perspective: 1200px
+  On mouse move: rotateX ±5deg, rotateY ±7deg
+  Smooth lerp: factor 0.06 (slower = more luxurious feel)
+  On mouse leave: springs back to rotateX(0) rotateY(0)
+  transition: 0.8s ease-out on leave
+  Gives headline a "holographic floating card" feel
 ```
+
+---
 
 **Supporting Elements:**
 ```
-- Subtitle (below headline):
+- Subtitle:
   "Nepal's first elite futsal booking, rewards & tournament platform."
-  Outfit 18px, color: rgba(255,255,255,0.55)
-  Fades in at 0.5s delay
+  Outfit 18px, rgba(255,255,255,0.55), max-width: 480px
 
-- Live Counter Pill (bottom left):
+- Live Counter Pill (bottom left, absolute positioned):
   [● 1,432 WAITING]
-  Dot: #E6192B, pulsing animation
-  Text: JetBrains Mono 12px
-  Background: rgba(20,20,23,0.8), blur(8px)
-  Border: 1px solid rgba(230,25,43,0.3)
+  Red dot: pulsing scale 1 → 1.5 → 1, opacity 1 → 0.4 → 1, 1.5s infinite
+  JetBrains Mono 12px, letter-spacing: 0.1em
+  Background: rgba(20,20,23,0.85), backdrop-blur(8px)
+  Border: 1px solid rgba(230,25,43,0.25)
 
-- CTA Button (bottom right area, near headline):
+- CTA Button:
   "SECURE EARLY ACCESS"
   Diagonal clip-path, #E6192B background
-  Hover: white inner glow, instant
+  Hover: box-shadow erupts to var(--glow-red-intense), scale(1.02)
+  transition: 0.2s instant
   Opens WaitlistModal
 
-- Scroll indicator (bottom center):
-  "SCROLL" in JetBrains Mono 11px, muted
-  Animated line extending downward
+- Scroll indicator (bottom center, absolute):
+  "SCROLL" JetBrains Mono 11px, #52525B, letter-spacing: 0.2em
+  Vertical animated line below text:
+  Line draws downward (scaleY 0 → 1) then fades (opacity 1 → 0)
+  Loops every 2s
+  Disappears once user scrolls past 100px
 ```
 
-**Parallax on scroll:**
+---
+
+**Parallax while scrolling (within hero):**
 ```
-- useScroll + useTransform (Framer Motion)
-- Video/image bg: y moves at 0.3x scroll speed (slower = depth)
-- Headline text: y moves at 0.6x scroll speed (faster = foreground)
-- Creates natural depth separation
+- useScroll({ target: heroRef }) + useTransform — Framer Motion
+- scrollYProgress: [0, 1] mapped to:
+  Video bg:       y: 0px → 120px  (0.3x — moves slower, creates depth)
+  Headline:       y: 0px → -80px  (moves up faster than bg — foreground feel)
+  Subtitle:       y: 0px → -50px
+  Counter pill:   y: 0px → -30px
+  Overlay:        opacity: 0.4 → 0.95 (darkens as user scrolls — cinematic fade)
+- All transforms: smooth, no jank, passive scroll listener
 ```
 
-**3D SECTION TRANSITION — Hero → ParallaxStory:**
+---
+
+**3D EXIT TRANSITION — Hero → ParallaxStory:**
 ```
-This is the most important transition on the page.
+This is the cinematic handoff between hero and the story section.
+Must feel like physically moving through space — not watching elements animate.
 
-As user scrolls to bottom of hero:
-1. Hero content: rotateX(0deg) → rotateX(-15deg), scale(1) → scale(0.92)
-   Feels like the hero section tilts away / recedes into distance
-2. ParallaxStory section rises from below with rotateX(15deg) → rotateX(0deg)
-   Like a new panel flipping into view
-3. Perspective container wraps both sections: perspective: 1200px
-4. Duration: tied to scroll position, not time-based
-   Use Framer Motion useScroll + useTransform for scroll-linked values
+─── PERSPECTIVE WRAPPER (page.tsx) ───────────────────────────────
+Wrap <HeroSection> and <ParallaxStory> together in a single div:
+  style={{ perspective: '1400px', perspectiveOrigin: '50% 50%' }}
 
-Effect: feels like turning a 3D page / cube face rotating
+Attach useScroll to this wrapper div ref.
+All transition transforms are driven by this shared scrollYProgress.
+
+─── EASED SCROLL PROGRESS ────────────────────────────────────────
+Do NOT use raw scrollYProgress for the transforms.
+Apply quadratic ease-in-out manually so the transition
+starts slow, accelerates through the middle, arrives smoothly:
+
+  const easedProgress = useTransform(
+    scrollYProgress,
+    [0.65, 1.0],
+    [0, 1],
+    { clamp: true }
+  )
+  // Then remap through: t < 0.5 ? 2*t*t : -1+(4-2*t)*t
+  // Slow departure, fast middle, smooth arrival
+  // Feed easedProgress into ALL transforms below — not raw scrollYProgress
+
+─── HERO EXIT (easedProgress 0 → 1) ─────────────────────────────
+  rotateX:         0deg    → -20deg
+  scale:           1.0     → 0.86
+  opacity:         1.0     → 0.0
+  filter blur:     0px     → 4px     ← rack focus — blurs as it recedes
+  transformOrigin: "50% 100%"        ← pivots from bottom edge like a door hinge
+  willChange: transform, opacity, filter
+
+─── PARALLAXSTORY ENTRY (easedProgress 0 → 1) ───────────────────
+  rotateX:         22deg   → 0deg    ← rises and levels out
+  scale:           0.86    → 1.0     ← grows into full frame
+  opacity:         0.0     → 1.0
+  y:               60px    → 0px     ← physical upward push
+  filter blur:     4px     → 0px     ← clears as it arrives
+  transformOrigin: "50% 0%"          ← pivots from top edge
+  willChange: transform, opacity, filter
+
+Both sections use the same easedProgress range.
+They move in perfect coordination — one exits as the other enters.
+
+─── DEPTH FOG LAYER ──────────────────────────────────────────────
+A fixed fullscreen div sitting between the two sections.
+position: fixed, inset: 0, z-index: 50, pointer-events: none
+
+background: radial-gradient(
+  ellipse 60% 60% at 50% 50%,
+  rgba(230,25,43,0.12) 0%,
+  rgba(10,10,12,0.95) 60%,
+  rgba(10,10,12,1.0) 100%
+)
+
+opacity mapped to raw scrollYProgress (not eased):
+  [0.60, 0.78, 1.0] → [0, 1, 0]
+
+Grows in as transition starts, fades out as ParallaxStory arrives.
+Effect: feels like the camera is passing through physical depth/space.
+
+─── RED FLASH ────────────────────────────────────────────────────
+A second fixed fullscreen div above the fog layer.
+position: fixed, inset: 0, z-index: 51, pointer-events: none
+
+background: radial-gradient(
+  circle at 50% 50%,
+  rgba(230,25,43,0.25),
+  transparent 60%
+)
+
+opacity mapped to raw scrollYProgress:
+  [0.70, 0.82, 0.95] → [0, 0.3, 0]
+
+scale mapped to raw scrollYProgress:
+  [0.70, 0.82, 0.95] → [0.6, 1.4, 2.0]
+
+Peaks at scrollYProgress 0.82 — the exact midpoint of the transition.
+Effect: like passing through a red light source — cinematic energy burst.
+
+─── SUMMARY OF FULL EFFECT ───────────────────────────────────────
+As user scrolls through the transition zone:
+
+1. Hero content blurs slightly and tilts back from bottom hinge
+2. Dark fog with red center glow grows over the screen
+3. Red flash pulses at peak overlap — the "passing through" moment
+4. Fog clears as ParallaxStory rises, deblurs, and levels into place
+5. Everything is scroll-speed controlled — user owns the pacing
+6. Eased progress means it feels organic, not mechanical
+
+Result: feels like the user physically walked through a portal
+from the Hero world into the ParallaxStory world.
 ```
 
 ---
@@ -440,13 +633,58 @@ Text appears and disappears chapter by chapter.
 
 ```
 CHAPTER 1 — "THE FIELD" (scroll 0% → 25%)
-Background: Dark overhead view of empty futsal court
-Text center: 
-  "EVERY GREAT TEAM"          ← Bebas Neue 72px
-  "STARTS ON A PITCH."        ← Bebas Neue 72px, red on "PITCH"
-Parallax: background moves up at 0.2x speed
-3D: Text rises from y: 60 → 0 as chapter enters, sinks to y: -60 as it exits
-Grain intensifies slightly
+Background: dark grid + particle layer (same as hero, lighter intensity)
+Text center:
+  "EVERY GREAT TEAM"     ← Bebas Neue 72px, white
+  "STARTS ON A PITCH."   ← Bebas Neue 72px, "PITCH." in #E6192B with glow
+
+SCROLL-LINKED TRANSFORMS (all useTransform on chapter scrollYProgress):
+
+ch1Opacity:       [0, 0.08, 0.22, 0.25] → [0, 1, 1, 0]
+ch1RotateX:       [0, 0.08, 0.25]       → [18deg, 0deg, -18deg]
+ch1Y:             [0, 0.08, 0.25]       → [60px, 0px, -60px]
+ch1Scale:         [0, 0.15, 0.25]       → [0.82, 1.0, 1.0]
+ch1Z:             [0, 0.15, 0.25]       → [-120px, 0px, 0px]
+
+ch1SkewX:         [0, 0.12, 0.18, 0.25] → ['18deg', '18deg', '-3deg', '0deg']
+  Keyframe logic:
+    0 → 0.12   held at 18deg (arrives while still skewed)
+    0.12→0.18  snaps to -3deg (overshoot past straight)
+    0.18→0.25  settles to 0deg (snaps perfectly straight)
+  The -3deg overshoot makes it feel physical, not just eased
+
+ch1LetterSpacing: [0, 0.12, 0.18, 0.25] → ['0.4em', '0.4em', '-0.02em', '0.05em']
+  Matches skew overshoot timing exactly —
+  letters spread wide → compress tight → settle normal
+  Both snap straight simultaneously for unified feel
+
+ch1TextGlow (on "PITCH." span only):
+  scrollYProgress [0, 0.15, 0.25]:
+  '0 0 0px rgba(230,25,43,0)'
+  → '0 0 60px rgba(230,25,43,0.6)'
+  → '0 0 40px rgba(230,25,43,0.4)'
+  Glow builds as word arrives, settles to ambient
+
+MOTION.DIV STYLE PROPS:
+  opacity, rotateX, y, scale, z, skewX, ch1LetterSpacing
+  perspective: '1200px'
+  transformStyle: 'preserve-3d'
+
+STICKY CONTAINER must have:
+  perspective: '1000px'
+  transformStyle: 'preserve-3d'
+  (Without this, z transform flattens and depth is lost)
+
+EFFECT SUMMARY:
+  Text arrives from deep Z space (-120px back)
+  Tilted forward (rotateX 18deg) and leaning sideways (skewX 18deg)
+  Letters spread apart (letterSpacing 0.4em)
+  All snap into position simultaneously — scale, skew, spacing
+  -3deg overshoot on skew + -0.02em overshoot on spacing
+  feel like the words physically slam into place
+  "PITCH." red glow blooms as the word arrives
+  On exit: tilts back rotateX -18deg and fades out
+```
 
 CHAPTER 2 — "THE STRUGGLE" (scroll 25% → 50%)
 Background: blurred, moody — represents chaos/frustration

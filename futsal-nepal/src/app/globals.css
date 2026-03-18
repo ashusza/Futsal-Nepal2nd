@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #E6192B;
-  --color-accent: #FF3344;
+  --color-primary: #10B981;
+  --color-accent: #34D399;
   --color-background: #0A0A0C;
   --color-surface: #141417;
   --color-surface-2: #1C1C20;
@@ -13,6 +13,7 @@
   --font-heading: "Bebas Neue", sans-serif;
   --font-body: "Outfit", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  --font-metal: var(--font-metal-mania), sans-serif;
 
   --animate-ken-burns: kenBurns 10s ease-in-out infinite alternate;
   --animate-pulse-dot: pulseDot 1.5s ease-in-out infinite;
@@ -40,14 +41,14 @@
     100% { transform: scaleX(1); }
   }
 
-  --shadow-glow-red: 0 0 80px -20px rgba(230, 25, 43, 0.35);
-  --shadow-glow-red-intense: 0 0 120px -10px rgba(230, 25, 43, 0.5);
-  --shadow-glow-red-sm: 0 0 30px -10px rgba(230, 25, 43, 0.3);
+  --shadow-glow-red: 0 0 80px -20px rgba(16, 185, 129, 0.35);
+  --shadow-glow-red-intense: 0 0 120px -10px rgba(16, 185, 129, 0.5);
+  --shadow-glow-red-sm: 0 0 30px -10px rgba(16, 185, 129, 0.3);
 }
 
 :root {
-  --color-primary: #E6192B;
-  --color-accent: #FF3344;
+  --color-primary: #10B981;
+  --color-accent: #34D399;
   --color-background: #0A0A0C;
   --color-surface: #141417;
   --color-surface-2: #1C1C20;
@@ -55,8 +56,8 @@
   --color-muted: #52525B;
   --color-muted-2: #3A3A3F;
   --radius: 0px;
-  --glow-red: 0 0 80px -20px rgba(230, 25, 43, 0.35);
-  --glow-red-intense: 0 0 120px -10px rgba(230, 25, 43, 0.5);
+  --glow-red: 0 0 80px -20px rgba(16, 185, 129, 0.35);
+  --glow-red-intense: 0 0 120px -10px rgba(16, 185, 129, 0.5);
   --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
   background-color: var(--color-background);
@@ -80,4 +81,44 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@keyframes drawLine {
+  from { stroke-dashoffset: var(--dash-length); }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate(0px, 0px); }
+  33% { transform: translate(30px, -30px); }
+  66% { transform: translate(-20px, 20px); }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate(0px, 0px); }
+  33% { transform: translate(-25px, 25px); }
+  66% { transform: translate(15px, -15px); }
+}
+
+@keyframes floatOrb3 {
+  0%, 100% { transform: translate(0px, 0px); }
+  50% { transform: translate(20px, -20px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
 }

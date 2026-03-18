@@ -9,33 +9,32 @@ export default function FeatureLobby() {
   const { ref: containerRef, inView } = useInView(0.3);
   const tiltRef = useMouseTilt(6); // subtle float interaction
 
-  const [openSpots, setOpenSpots] = useState(0);
-
-  useEffect(() => {
-    if (inView) {
-      // Counter up to 423
-      let start = 0;
-      const end = 423;
-      const duration = 1500;
-      const increment = end / (duration / 16);
-
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          setOpenSpots(end);
-          clearInterval(timer);
-        } else {
-          setOpenSpots(Math.floor(start));
-        }
-      }, 16);
-
-      return () => clearInterval(timer);
-    }
-  }, [inView]);
+  // Counter removed as per request
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-[80vh] bg-[#0D0D10] flex items-center justify-center overflow-hidden py-24 [perspective:1000px]">
-      
+    <section id="lobby" ref={containerRef} className="relative w-full min-h-[80vh] bg-[#0D0D10] flex items-center justify-center overflow-hidden py-24 [perspective:1000px]">
+      {/* Atmospheric Background Layers */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Layer 1 — Dot grid */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(16,185,129,0.08) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+            maskImage: 'radial-gradient(ellipse 90% 90% at 50% 50%, black 30%, transparent 100%)'
+          }}
+        />
+
+        {/* Layer 2 — Bottom right glow */}
+        <div 
+          className="absolute -right-[100px] -bottom-[100px] rounded-full"
+          style={{
+            width: '600px', height: '600px',
+            background: 'radial-gradient(circle, rgba(16,185,129,0.08), transparent 70%)',
+            filter: 'blur(100px)'
+          }}
+        />
+      </div>
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Copy Panel */}
@@ -51,7 +50,6 @@ export default function FeatureLobby() {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="font-mono text-[11px] text-muted tracking-[0.2em] mb-6"
           >
-            04 // THE LOBBY
           </motion.div>
 
           <motion.h2
@@ -80,10 +78,10 @@ export default function FeatureLobby() {
              className="mt-12 flex items-center gap-4"
           >
             <span className="font-mono text-4xl text-white">
-              {openSpots}
+              SQUADS
             </span>
             <span className="font-mono text-[10px] text-primary tracking-widest uppercase">
-              OPEN SPOTS<br/>THIS WEEK
+              JOIN<br/>ANYTIME
             </span>
           </motion.div>
         </motion.div>

@@ -99,8 +99,8 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
         
         if (p.isRed) {
           ctx.shadowBlur = 15;
-          ctx.shadowColor = `rgba(230, 25, 43, 0.95)`;
-          ctx.fillStyle = `rgba(230, 25, 43, ${currentOpacity})`;
+          ctx.shadowColor = `rgba(16, 185, 129, 0.95)`;
+          ctx.fillStyle = `rgba(16, 185, 129, ${currentOpacity})`;
         } else {
           ctx.shadowBlur = 0;
           ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.65})`;
@@ -227,7 +227,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
                 <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.025)" strokeWidth="0.5" />
               </pattern>
               <radialGradient id="textGlow" cx="25%" cy="50%" r="45%">
-                <stop offset="0%" stopColor="rgba(230,25,43,0.15)" />
+                <stop offset="0%" stopColor="rgba(16, 185, 129, 0.15)" />
                 <stop offset="100%" stopColor="transparent" />
               </radialGradient>
             </defs>
@@ -235,11 +235,11 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
             <rect width="100%" height="100%" fill="url(#textGlow)" />
 
             {/* Pitch Lines */}
-            <g fill="none" stroke="rgba(230,25,43,0.22)" strokeWidth="0.8">
+            <g fill="none" stroke="rgba(16, 185, 129, 0.22)" strokeWidth="0.8">
               {/* Boundary */}
               <rect 
                 x="40" y="40" width="1360" height="820" 
-                strokeWidth="1" stroke="rgba(230,25,43,0.1)"
+                strokeWidth="1" stroke="rgba(16, 185, 129, 0.1)"
                 style={{ 
                   strokeDasharray: 4360, strokeDashoffset: 4360,
                   animation: `drawLine 2s forwards 0.1s`
@@ -271,7 +271,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
               />
               <rect 
                 x="15" y="380" width="25" height="140"
-                stroke="rgba(230,25,43,0.18)" strokeWidth="1"
+                stroke="rgba(16, 185, 129, 0.18)" strokeWidth="1"
                 style={{ 
                   strokeDasharray: 330, strokeDashoffset: 330,
                   animation: `drawLine 1.5s forwards 0.9s`
@@ -287,7 +287,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
               />
               <rect 
                 x="1400" y="380" width="25" height="140"
-                stroke="rgba(230,25,43,0.18)" strokeWidth="1"
+                stroke="rgba(16, 185, 129, 0.18)" strokeWidth="1"
                 style={{ 
                   strokeDasharray: 330, strokeDashoffset: 330,
                   animation: `drawLine 1.5s forwards 0.9s`
@@ -295,9 +295,9 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
               />
             </g>
             {/* Spots */}
-            <circle cx="720" cy="450" r="4" fill="rgba(230,25,43,0.2)" />
-            <circle cx="220" cy="450" r="3" fill="rgba(230,25,43,0.2)" />
-            <circle cx="1220" cy="450" r="3" fill="rgba(230,25,43,0.2)" />
+            <circle cx="720" cy="450" r="4" fill="rgba(16, 185, 129, 0.2)" />
+            <circle cx="220" cy="450" r="3" fill="rgba(16, 185, 129, 0.2)" />
+            <circle cx="1220" cy="450" r="3" fill="rgba(16, 185, 129, 0.2)" />
           </svg>
 
           {/* Layer 3: Dark Overlay */}
@@ -348,7 +348,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
                   className="font-heading text-primary leading-[0.88] m-0 tracking-[0.05em] uppercase"
                   style={{ 
                     fontSize: "clamp(72px, 9vw, 140px)",
-                    textShadow: "0 0 80px rgba(230,25,43,0.45)"
+                    textShadow: "0 0 80px rgba(16, 185, 129, 0.45)"
                   }}
                 >
                   WIN.
@@ -359,7 +359,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
                   transition={{ delay: 0.85, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute inset-0 z-[-1] pointer-events-none"
                   style={{ 
-                    background: "radial-gradient(ellipse 50% 40% at 15% 50%, rgba(230,25,43,0.15), transparent)"
+                    background: "radial-gradient(ellipse 50% 40% at 15% 50%, rgba(16, 185, 129, 0.15), transparent)"
                   }}
                 />
               </div>
@@ -371,7 +371,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
               transition={{ delay: 1.1, duration: 0.6, ease: "easeOut" }}
               className={`${outfit.className} mt-[28px] max-w-[460px] text-[17px] text-white/55`}
             >
-              Nepal&apos;s first elite futsal booking, rewards & tournament platform.
+              Nepal&apos;s first  futsal booking, rewards & tournament platform.
             </motion.p>
 
             {/* CTA */}
@@ -380,7 +380,7 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
               initial={{ x: 30, opacity: 0 }}
               animate={splashDone ? { x: 0, opacity: 1 } : {}}
               transition={{ delay: 1.45, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative bg-primary text-white font-heading text-[15px] tracking-[0.1em] px-[36px] py-[14px] mt-8 [clip-path:polygon(0_0,calc(100%-14px)_0,100%_100%,0_100%)] hover:shadow-[0_0_60px_-10px_rgba(230,25,43,0.6)] hover:scale-[1.02] whileTap:scale-[0.98] transition-all duration-300 uppercase"
+              className="group relative bg-primary text-white font-heading text-[15px] tracking-[0.1em] px-[36px] py-[14px] mt-8 [clip-path:polygon(0_0,calc(100%-14px)_0,100%_100%,0_100%)] hover:shadow-[0_0_60px_-10px_rgba(16, 185, 129, 0.6)] hover:scale-[1.02] whileTap:scale-[0.98] transition-all duration-300 uppercase"
             >
               SECURE EARLY ACCESS
             </motion.button>
@@ -391,22 +391,6 @@ export default function HeroSection({ splashDone, onOpenWaitlist }: HeroSectionP
         <AnimatePresence>
           {splashDone && (
             <>
-              {/* Live Counter Pill */}
-              <motion.div
-                initial={{ x: -30, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 1.3, duration: 0.5 }}
-                className="absolute bottom-[32px] left-[64px] z-[10] flex items-center gap-3 bg-[rgba(20,20,23,0.85)] backdrop-blur-[8px] border border-[rgba(230,25,43,0.25)] px-[16px] py-[8px]"
-              >
-                <span 
-                  className="w-1.5 h-1.5 rounded-full bg-primary" 
-                  style={{ animation: 'pulseDot 1.5s infinite ease-in-out' }}
-                />
-                <span className={`${jetbrains.className} text-[11px] text-[#52525B] tracking-[0.2em] uppercase`}>
-                  1,432 WAITING
-                </span>
-              </motion.div>
-
               {/* Scroll Indicator */}
               {showScroll && (
                 <motion.div

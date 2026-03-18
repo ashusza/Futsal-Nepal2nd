@@ -9,8 +9,30 @@ export default function SlotShowcase() {
   const tiltRef = useMouseTilt(8); // mild hover tracking
 
   return (
-    <section ref={ref} className="relative w-full min-h-screen bg-[#0A0A0C] flex items-center justify-center py-24 overflow-hidden [perspective:1000px]">
-      
+    <section id="features" ref={ref} className="relative w-full min-h-screen bg-[#0A0A0C] flex items-center justify-center py-24 overflow-hidden [perspective:1000px]">
+      {/* Atmospheric Background Layers */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Layer 1 — Hexagon pattern SVG */}
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hex" width="56" height="100" patternUnits="userSpaceOnUse">
+              <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z" fill="none" stroke="rgba(16,185,129,0.04)" strokeWidth="0.8" />
+              <path d="M28 50 L56 66 L56 98 L28 114 L0 98 L0 66 Z" fill="none" stroke="rgba(16,185,129,0.04)" strokeWidth="0.8" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hex)" style={{ maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent)' }} />
+        </svg>
+
+        {/* Layer 2 — Right side glow */}
+        <div 
+          className="absolute -right-[100px] top-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            width: '500px', height: '500px',
+            background: 'radial-gradient(circle, rgba(16,185,129,0.08), transparent 70%)',
+            filter: 'blur(80px)'
+          }}
+        />
+      </div>
       <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Left Copy Panel */}
@@ -26,7 +48,6 @@ export default function SlotShowcase() {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="font-mono text-[11px] text-muted tracking-[0.2em] mb-6"
           >
-            01 // BOOK YOUR PITCH
           </motion.div>
 
           <motion.h2

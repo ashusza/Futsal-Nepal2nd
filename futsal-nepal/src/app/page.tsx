@@ -11,11 +11,21 @@ import SlotShowcase from "@/components/SlotShowcase";
 import FeatureRewards from "@/components/FeatureRewards";
 import FeatureTournaments from "@/components/FeatureTournaments";
 import FeatureLobby from "@/components/FeatureLobby";
-import InvestorStrip from "@/components/InvestorStrip";
+import VenueOwnerSection from "@/components/VenueOwnerSection";
 import WaitlistSection from "@/components/WaitlistSection";
+import ProblemStatement from "@/components/ProblemStatement";
+import Benefits from "@/components/Benefits";
+import MarketStats from "@/components/MarketStats";
 
 export default function Home() {
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setIsWaitlistOpen(true);
+    window.addEventListener('open-waitlist', handleOpen);
+    return () => window.removeEventListener('open-waitlist', handleOpen);
+  }, []);
+
   const [splashDone, setSplashDone] = useState(false);
 
   // Sync splashDone with IntroSplash's internal logic (hides on scroll > 60)
@@ -31,7 +41,7 @@ export default function Home() {
 
   return (
     <main className="relative bg-background text-white selection:bg-primary selection:text-white">
-      {/* Global Entry Animation (Futsal Nepal staggered reveal) */}
+      {/* Global Entry Animation (Game Circle staggered reveal) */}
       <IntroSplash />
 
       {/* Navigation (Sticky after hero scroll) */}
@@ -47,16 +57,21 @@ export default function Home() {
           />
         </div>
 
+        <ProblemStatement />
+
         <div id="story">
           <ParallaxStory />
         </div>
       </div>
 
+      <MarketStats />
+      
       <div id="features" className="relative z-20 bg-background">
         <SlotShowcase />
         <FeatureRewards />
-        <FeatureTournaments />
         <FeatureLobby />
+        <FeatureTournaments />
+        <Benefits />
       </div>
 
       <div id="pricing">
@@ -64,7 +79,7 @@ export default function Home() {
       </div>
 
       <div id="contact" className="relative z-20">
-        <InvestorStrip />
+        <VenueOwnerSection />
         <WaitlistSection />
         <Footer />
       </div>
@@ -75,15 +90,7 @@ export default function Home() {
         onClose={() => setIsWaitlistOpen(false)} 
       />
 
-      {/* Floating CTA interceptor to open modal if they click standard CTA's 
-          Note: For a real app we would pass setIsWaitlistOpen down through context 
-          or props to the buttons in HeroSection, WaitlistSection, and Navbar.
-          For this iteration we'll rely on those components triggering it via events or prop drilling.
-          To keep it simple here, we attach a global listener. */}
-      {/* 
-        A quick hack to bind all 'EARLY ACCESS' / 'SECURE SPOT' buttons to opening the modal 
-        without prop-drilling into 4 different deeply nested components.
-      */}
+      {/* Floating CTA interceptor for legacy elements */}
       <div 
         className="hidden" 
         onClick={(e: any) => {
