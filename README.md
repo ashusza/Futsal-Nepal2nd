@@ -1,64 +1,90 @@
-# Futsal_Nepal2nd# ⚽ FUTSAL NEPAL — The Elite Pitch Experience
+# Game Circle — Futsal Nepal (Early Access Landing Page)
 
-[![Vercel Deployment](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
-[![Next.js 15](https://img.shields.io/badge/Next.js-15-E6192B?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
-[![Framer Motion](https://img.shields.io/badge/Motion-Framer-FF3344?style=for-the-badge&logo=framer&logoColor=white)](https://framer.com/motion)
+> **Nepal's First Elite Futsal Booking, Rewards & Tournament Platform**
 
-**RANKED #1 IN CINEMATIC SPORTS TECH — NEPAL'S FIRST ELITE FUTSAL ECOSYSTEM.**
-
-Futsal Nepal is a high-fidelity, high-performance landing page designed to capture early access for players and signal institutional credibility to investors. It features an aggressive "Cinematic Red" aesthetic combined with advanced scroll-driven animations and 3D interactions.
+This repository contains the high-fidelity pre-launch landing page for **Game Circle**. It is designed as an aggressive, cinematic teaser to capture early-access player emails and secure early venue partnerships across Kathmandu and Pokhara.
 
 ---
 
-## 🛠️ The Tech Stack
-
-Built for speed, impact, and smooth delivery:
-
-- **Framework**: [Next.js 15+](https://nextjs.org) (App Router)
-- **Styling**: [Tailwind CSS v4+](https://tailwindcss.com)
-- **Animations**: [Framer Motion](https://framer.com/motion) (Scroll-linked, 3D Tilt, Staggered Reveals)
-- **Typography**: Bebas Neue (Headings), Outfit (Body), JetBrains Mono (Technical UI)
-- **Icons**: Lucide React
-- **Hosting**: Vercel (Edge optimized)
-
----
-
-## ✨ Design Signatures
-
-- **Aggressive-Red Aesthetic**: Tailored color palette (#E6192B) on Deep Space Black.
-- **Cinematic Entry**: Custom `IntroSplash` with 3D word assembly.
-- **Micro-Animations**: Mouse-responsive 3D tilt effects and holographic radial glows.
-- **Zero-Radius Design**: Sleek, sharp edges with custom diagonal clip-paths.
-- **Parallax Narrative**: A 400vh scroll-driven story telling the future of futsal in Nepal.
+## 🎨 Design System (Carbon Forest)
+The application extensively uses an ultra-modern, cinematic design language:
+- **Theme**: Deep space carbon blacks `#0A0A0C` contrasted against stark Emerald Green `#10B981` accents.
+- **Glassmorphism**: Heavy use of `backdrop-filter: blur` combined with SVG noise overlays for physical texture.
+- **Architecture**: `border-radius: 0px` globally to maintain an elite, razor-sharp edge.
+- **Motion**: 100% SVG and Canvas-driven physics. **No video or generic hero images.** It uses code to visualize product concepts logically. 
+- **Typography**: 
+  - *Headings*: **Bebas Neue** (Bold, tight tracking)
+  - *Body*: **Outfit** (Clean readability)
+  - *Technical/UI*: **JetBrains Mono** (Uppercase, mono-spaced tags)
 
 ---
 
-## 🏗️ Getting Started (Local)
+## 🚀 Key Technical Features
 
-1. **Clone the repo**
-2. **Install dependencies**:
-   ```bash
-   cd futsal-nepal
-   npm install
-   ```
-3. **Run the dev server**:
-   ```bash
-   npm run dev
-   ```
-4. **View at** `http://localhost:3000`
+### Narrative & Experience
+- **Interactive Mouse Tilt**: Most UI cards and panels utilize a custom `useMouseTilt` React hook to add subtle 3D `perspective: 1000px` rotation depending on cursor location.
+- **Parallax Storytelling**: Smooth, scroll-locked chapter sequences fading dynamically based on viewport scroll progress.
+- **Problem Statement Array**: A robust CSS `position: sticky` stack that presents player pain points card-by-card in a highly legible interface.
 
----
+### Code-Driven Visualizations (No Assets Required)
+- **Canvas Particle Hero**: An 800-particle interactive gravity simulation.
+- **SVG Intro Splash Screen**: Dynamically draws a futsal pitch layout line-by-line via CSS keyframes before shattering.
+- **Tournament Knockouts**: SVG pathing that procedurally draws an active tournament bracket on scroll entry.
+- **Animated SVG Trophy**: A multi-layered, 6-part Stagger animation using Framer Motion that physically builds a loyalty trophy.
 
-## 🚢 Deployment Notes
-
-This project is optimized for Vercel. 
-
-> [!IMPORTANT]
-> Because the app lives in the `/futsal-nepal` subdirectory, ensure the **Root Directory** in Vercel Settings is set to `futsal-nepal`.
+### Data Collection & Validation
+- **Venue Registration**: Robust dual-column layout strictly validating Nepali phone formats (98/97, 10-digits) with multi-state submit feedback (Idle → Loading → Shake on Error → Success).
+- **Global Waitlist Capture**: 
+  - Integrated into a static layout container at the page bottom.
+  - A universally available `WaitlistModal.tsx` tied to nav actions.
+  - A dynamic floating banner pushing early-access retention.
 
 ---
 
-<p align="center">
-  <b>BOOK. PLAY. EARN. DOMINATE.</b><br>
-  <i>Built with ❤️ for the Futsal Community of Nepal.</i>
-</p>
+## 💻 Tech Stack
+- **Framework**: [Next.js 14 App Router](https://nextjs.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Animation**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Fonts**: `next/font/google`
+- **Deployment**: Configured for Vercel
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+Make sure you have Node.js 18+ installed on your system.
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/ashusza/Futsal_Nepal2nd.git
+cd Futsal_Nepal2nd/futsal-nepal
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+---
+
+## 🔒 Competitor Protection Policy
+All actual in-app screenshots and literal platform features are purposefully withheld from this repository. Features are abstracted into SVG maps, ping radars, and code-based diagrams to build hype without giving away exact UX pipelines to competitors.
+
+---
+
+*Designed and Developed by Silicore Technologies Pvt. Ltd © 2026.*
